@@ -45,6 +45,12 @@ class HuffmanSuite extends FunSuite {
     }
   }
 
+  test("calculate calculateTimes correctly") {
+    new TestTrees {
+      assert(times(List('a', 'a', 'b', 'b', 'a', 'a', 'b', 'b', 'r', 'k', 'r', 'd', 'k', 'r', 'a')) == List(('a', 5), ('b', 4), ('r', 3), ('k', 2), ('d', 1)))
+    }
+  }
+
   test("decode and quickEncode a very short text should be identity") {
     new TestTrees {
       val de = decode(t1, quickEncode(t1)("ab".toList))

@@ -76,24 +76,24 @@ object Huffman {
     _calculateTimes(chars, List())
   }
 
-  def getIndexCounter(innerc: Char, acc: List[(Char, Int)]): (Int, Int) =
+  def getIndexCounter(innerc: Char, acc: List[(Char, Int)]): (Char, Int) =
     acc match {
-      case Nil => (-1, 0)
+      case Nil => ('_', -1)
       case acc =>
         acc.find(_._1 == innerc) match {
-          case Some((i, c)) => (i, c)
-          case None         => (-1, 0)
+          case Some((c, count)) => (c, count)
+          case None             => ('_', -1)
         }
     }
 
-  def removeElement[T >: Nothing](i: Int, l: List[T]): List[T] = l.take(i) ::: l.takeRight(l.size - i - 1)
+  def removeElement(c: Char, l: List[(Char, Int)]): List[(Char, Int)] = l.filter(_._1 != c)
 
   def _calculateTimes(chars: List[Char], acc: List[(Char, Int)]): List[(Char, Int)] = chars match {
-    case Nil => acc
+    case Nil => acc.sortBy(_._2).reverse
     case x :: xs =>
       getIndexCounter(x, acc) match {
-        case (i, c) if i < 0 => _calculateTimes(xs, (x, 1) :: acc);
-        case (i, c)          => _calculateTimes(xs, (x, c + 1) :: removeElement(i, acc));
+        case ('_', -1)  => _calculateTimes(xs, (x, 1) :: acc);
+        case (c, count) => _calculateTimes(xs, (x, count + 1) :: removeElement(c, acc));
       }
   }
 
